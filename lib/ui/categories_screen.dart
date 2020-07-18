@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:test_a5/network/web_service.dart';
-import 'package:test_a5/ui/search_screen.dart';
 import 'package:test_a5/ui/tabs.dart';
 
 class CategoriesPage extends StatefulWidget {
@@ -23,16 +22,16 @@ class _CategoriesPageState extends State<CategoriesPage> {
     return WebService.getCategories();
   }
 
-  CountProvider counterProvider;
-  void _incrementCounter(String query) {
+  QueryProvider queryProvider;
+  void _changeQuery(String query) {
     setState(() {
-      counterProvider.setQuery(query);
+      queryProvider.setQuery(query);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    counterProvider = CountProvider.of(context);
+    queryProvider = QueryProvider.of(context);
     return FutureBuilder(
       future: _categories,
       builder: (context, AsyncSnapshot snapshot) {
@@ -44,7 +43,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
                 itemCount: snapshot.data.length,
                 itemBuilder: (BuildContext context, int index) {
                   return ListTile(
-                    onTap: () => {_incrementCounter(snapshot.data[index])},
+                    onTap: () => {_changeQuery(snapshot.data[index])},
                     title: Text('${snapshot.data[index]}'),
                   );
                 }),

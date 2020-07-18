@@ -25,7 +25,7 @@ class _SearchPageState extends State<SearchPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    CountProvider data = CountProvider.of(context);
+    QueryProvider data = QueryProvider.of(context);
     query = data.query;
     _searchFuture = _search(query);
     editingController.text = query;

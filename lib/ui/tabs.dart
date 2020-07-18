@@ -10,16 +10,15 @@ class TabsPage extends StatefulWidget {
   _TabsPageState createState() => _TabsPageState();
 }
 
-class CountProvider extends InheritedWidget {
+class QueryProvider extends InheritedWidget {
   final Widget child;
   final DefaultTabController controller;
   String query;
-  CountProvider({Key key, this.child, this.controller, this.query})
+  QueryProvider({Key key, this.child, this.controller, this.query})
       : super(key: key, child: child);
 
-  static CountProvider of(BuildContext context) {
-    return (context.inheritFromWidgetOfExactType(CountProvider)
-        as CountProvider);
+  static QueryProvider of(BuildContext context) {
+    return (context.dependOnInheritedWidgetOfExactType<QueryProvider>());
   }
 
   void setQuery(String query) {
@@ -27,7 +26,7 @@ class CountProvider extends InheritedWidget {
   }
 
   @override
-  bool updateShouldNotify(CountProvider oldWidget) {
+  bool updateShouldNotify(QueryProvider oldWidget) {
     return true;
   }
 }
@@ -64,7 +63,7 @@ class _TabsPageState extends State<TabsPage>
               ),
             ]),
           ),
-          body: CountProvider(
+          body: QueryProvider(
             query: '',
             child: TabBarView(children: [
               RandomJokePage(),
