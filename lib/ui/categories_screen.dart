@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:test_a5/main.dart';
 import 'package:test_a5/network/web_service.dart';
 import 'package:test_a5/ui/tabs.dart';
 
@@ -43,7 +44,11 @@ class _CategoriesPageState extends State<CategoriesPage> {
                 itemCount: snapshot.data.length,
                 itemBuilder: (BuildContext context, int index) {
                   return ListTile(
-                    onTap: () => {_changeQuery(snapshot.data[index])},
+                    onTap: () {
+                      _changeQuery(snapshot.data[index]);
+                      MyApp.myTabbedPageKey.currentState.tabController
+                          .animateTo(2);
+                    },
                     title: Text('${snapshot.data[index]}'),
                   );
                 }),

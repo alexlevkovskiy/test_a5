@@ -7,7 +7,58 @@ class TabsPage extends StatefulWidget {
   TabsPage({Key key}) : super(key: key);
 
   @override
-  _TabsPageState createState() => _TabsPageState();
+  TabsPageState createState() => TabsPageState();
+}
+
+class TabsPageState extends State<TabsPage>
+    with SingleTickerProviderStateMixin {
+  TabController tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    tabController = new TabController(vsync: this, length: 3);
+  }
+
+  @override
+  void dispose() {
+    tabController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Tabs Example'),
+        bottom: TabBar(
+          controller: tabController,
+          tabs: [
+            Tab(
+              text: "Random",
+            ),
+            Tab(
+              text: "Categories",
+            ),
+            Tab(
+              text: 'Search',
+            ),
+          ],
+        ),
+      ),
+      body: QueryProvider(
+        query: '',
+        child: TabBarView(
+          children: [
+            RandomJokePage(),
+            CategoriesPage(),
+            SearchPage(),
+          ],
+          controller: tabController,
+        ),
+      ),
+    );
+  }
 }
 
 class QueryProvider extends InheritedWidget {
@@ -28,51 +79,5 @@ class QueryProvider extends InheritedWidget {
   @override
   bool updateShouldNotify(QueryProvider oldWidget) {
     return true;
-  }
-}
-
-class _TabsPageState extends State<TabsPage>
-    with SingleTickerProviderStateMixin {
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: DefaultTabController(
-        length: 3,
-        child: Scaffold(
-          appBar: AppBar(
-            title: Text('Tabs Example'),
-            bottom: TabBar(tabs: [
-              Tab(
-                text: "Random",
-              ),
-              Tab(
-                text: "Categories",
-              ),
-              Tab(
-                text: 'Search',
-              ),
-            ]),
-          ),
-          body: QueryProvider(
-            query: '',
-            child: TabBarView(children: [
-              RandomJokePage(),
-              CategoriesPage(),
-              SearchPage(),
-            ]),
-          ),
-        ),
-      ),
-    );
   }
 }

@@ -38,6 +38,8 @@ class _SearchPageState extends State<SearchPage> {
         _isValid = true;
       else
         _isValid = false;
+
+      query = newQuery;
     });
   }
 
@@ -53,6 +55,7 @@ class _SearchPageState extends State<SearchPage> {
           child: TextField(
             onChanged: (value) {
               checkIsValid(value);
+              if (_isValid) _searchFuture = _search(query);
             },
             controller: editingController,
             decoration: InputDecoration(
@@ -74,9 +77,7 @@ class _SearchPageState extends State<SearchPage> {
           child: FutureBuilder(
               future: _searchFuture,
               builder: (context, AsyncSnapshot snapshot) {
-                if (!snapshot.hasData) {
-                  return Center(child: CircularProgressIndicator());
-                } else {
+                if (snapshot.hasData) {
                   if (!_isValid)
                     return Container(
                       child: Text('Search query must be from 3 to 120 symbols'),
@@ -90,6 +91,8 @@ class _SearchPageState extends State<SearchPage> {
                           );
                         }),
                   );
+                } else {
+                  return Center();
                 }
               }),
         ),
