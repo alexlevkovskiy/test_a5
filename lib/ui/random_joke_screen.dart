@@ -1,35 +1,30 @@
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-
 import 'package:flutter/material.dart';
+import 'package:test_a5/block/random_block.dart';
 import 'package:test_a5/network/models/random_joke.dart';
-import 'package:test_a5/network/web_service.dart';
 
-class RandomJokePage extends StatefulWidget {
+class RandomJokePage extends StatelessWidget {
   RandomJokePage({Key key}) : super(key: key);
 
-  @override
-  _RandomJokePageState createState() => _RandomJokePageState();
-}
-
-class _RandomJokePageState extends State<RandomJokePage> {
-  Future<RandomJoke> _jokes;
-  @override
-  void initState() {
-    super.initState();
-    _jokes = _getRandomJokes();
+  Widget jokeTextView(String text) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Center(
+        child: Text(
+          text,
+          style: TextStyle(),
+        ),
+      ),
+    );
   }
 
-  Future<RandomJoke> _getRandomJokes() {
-    return WebService.getRandomJokes();
-  }
-
+  final RandomBlock randomBlock = RandomBlock();
   @override
   Widget build(BuildContext context) {
+    randomBlock.fetchRandomJoke();
     return Column(
       children: [
-        FutureBuilder<RandomJoke>(
-          future: _jokes,
+        StreamBuilder<RandomJoke>(
+          stream: randomBlock.items,
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               return Center(child: CircularProgressIndicator());
@@ -45,24 +40,12 @@ class _RandomJokePageState extends State<RandomJokePage> {
           },
         ),
         RaisedButton(
-            onPressed: () => setState(() {
-                  _jokes = _getRandomJokes();
-                }),
+            onPressed: () {
+              randomBlock.fetchRandomJoke();
+            },
             color: Colors.purple,
             child: Text('Refresh'))
       ],
-    );
-  }
-
-  Widget jokeTextView(String text) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Center(
-        child: Text(
-          text,
-          style: TextStyle(),
-        ),
-      ),
     );
   }
 }
